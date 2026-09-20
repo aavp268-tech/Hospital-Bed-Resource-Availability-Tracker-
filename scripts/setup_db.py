@@ -31,14 +31,17 @@ def main() -> None:
 
     # 2. Unique indexes. These fail if duplicates already exist, so check first.
     problems = 0
-    for collection_name, field in ((HOSPITALS, "name"), (ADMINS, "username")):
+    for collection_name, field in ((HOSPITALS, "hospital_name"), (ADMINS, "username")):
         duplicates = find_duplicates(db[collection_name], field)
         if duplicates:
             problems += 1
             print(f"\nCannot make {collection_name}.{field} unique, duplicates found:")
             for item in duplicates:
-                print(f"  {item['_id']!r} appears {item['count']} times")
-            print("  Delete the extra documents in Atlas, then run this script again.")
+                if item["_id"] is None:
+                    print(f"  {item['count']} documents have no '{field}' field at all")
+                else:
+                    print(f"  {item['_id']!r} appears {item['count']} times")
+            print("  Fix or delete those documents in Atlas, then run this script again.")
             continue
         db[collection_name].create_index([(field, ASCENDING)], unique=True)
         print(f"Index ok: {collection_name}.{field} (unique)")
