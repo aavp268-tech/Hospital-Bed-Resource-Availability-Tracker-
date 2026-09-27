@@ -66,13 +66,6 @@ def update_resources(
 
     return result.modified_count > 0
 
-print(update_resources(
-    "Test Hospital",
-    35,
-    6,
-    3,
-    15
-))
 
 
  
