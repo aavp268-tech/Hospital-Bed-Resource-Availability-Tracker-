@@ -10,7 +10,7 @@ Settings come from environment variables (or a local .env file):
     MONGODB_DATABASE  optional, defaults to "hospital_tracker"
 
 Check your setup from the project root with:
-    python -m config.dbp
+    python -m config.db
 """
 from __future__ import annotations
 
