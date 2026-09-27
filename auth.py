@@ -53,5 +53,3 @@ def login_admin(username, password):
         return True, "Login successful"
 
     return False, "Incorrect password"
-result = login_admin("testadmin", "test123")
-print(result)
