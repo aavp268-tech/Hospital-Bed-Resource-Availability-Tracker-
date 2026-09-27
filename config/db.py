@@ -17,6 +17,7 @@ from __future__ import annotations
 import os
 from functools import lru_cache
 
+import certifi
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.database import Database
@@ -57,7 +58,12 @@ def get_client() -> MongoClient:
             "MONGODB_URI is not set. Put it in your environment or in a .env file."
         )
     try:
-        client = MongoClient(uri, serverSelectionTimeoutMS=5000, appName="hospital-tracker")
+        client = MongoClient(
+            uri,
+            serverSelectionTimeoutMS=5000,
+            appName="hospital-tracker",
+            tlsCAFile=certifi.where(),
+        )
         client.admin.command("ping")  # forces a real connection now, not on first query
     except PyMongoError as exc:
         raise DatabaseError(
