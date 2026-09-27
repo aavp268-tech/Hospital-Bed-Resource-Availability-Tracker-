@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 data/local_db.json
 .env
+data/hospitals.json
+data/searchlogs.json
