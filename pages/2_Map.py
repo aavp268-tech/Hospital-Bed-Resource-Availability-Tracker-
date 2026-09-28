@@ -1,4 +1,4 @@
-"""F-2: Map view of the latest search.
+"""F-2: Map view of the latest search, now using the shared F-3 theme.
 
 Reads what pages/1_Search.py stored in st.session_state:
     "search_results"  hospitals inside the radius that have the resource
@@ -17,13 +17,15 @@ from geopy.distance import geodesic
 from streamlit_folium import st_folium
 
 from config.db import HOSPITALS, get_db
+from utils.ui import apply_theme, page_header, render_empty_state, render_error
 
 st.set_page_config(page_title="Hospital Map", page_icon="🗺️", layout="centered")
-st.title("🗺️ Hospital Map")
+apply_theme()
+page_header("Mumbai care network", "Hospital map", "Your search results, plotted by distance and availability.")
 
 meta = st.session_state.get("search_meta")
 if not meta:
-    st.info("Run a search first, then come back here to see the results on a map.")
+    render_empty_state()
     st.page_link("pages/1_Search.py", label="Go to Search", icon="🔎")
     st.stop()
 
@@ -45,15 +47,14 @@ def popup_html(name, distance, lines, contact=None):
     return f"<b>{name}</b><div>{distance} km away</div>{body}{call}"
 
 
-# Every hospital, so full ones can be shown in red. Falls back to search data only.
 try:
     all_hospitals = list(get_db()[HOSPITALS].find({}))
-except Exception:
-    all_hospitals = list(by_name.values())
+except Exception as error:
+    render_error(str(error))
+    all_hospitals = list(by_name.values())  # fall back to what the search already found
 
 m = folium.Map(location=origin, zoom_start=12, tiles="OpenStreetMap")
 
-# Patient location and search radius
 folium.Marker(origin, tooltip=f"You: {meta['area']}", icon=folium.Icon(color="blue", icon="user", prefix="fa")).add_to(m)
 folium.Circle(origin, radius=radius_km * 1000, color="#2a6fdb", fill=True, fill_opacity=0.06, weight=1).add_to(m)
 
@@ -71,7 +72,6 @@ for hospital in all_hospitals:
     else:
         color, status = "red", f"No {resource.lower()} available"
 
-    # Use the distance from the search when we have it, otherwise measure it here.
     found = by_name.get(name)
     distance = found["distance"] if found else round(geodesic(origin, (lat, lon)).km, 1)
 
@@ -90,11 +90,9 @@ for hospital in all_hospitals:
     if color == "green":
         bounds.append((lat, lon))
 
-# Zoom to fit the patient and the matching hospitals when there are any.
 if len(bounds) > 1:
     m.fit_bounds(bounds, padding=(30, 30))
 
-# returned_objects=[] stops the app rerunning every time someone pans or clicks the map.
 st_folium(m, use_container_width=True, height=520, returned_objects=[])
 
 st.markdown(
