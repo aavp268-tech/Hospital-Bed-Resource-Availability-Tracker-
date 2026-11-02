@@ -60,7 +60,12 @@ def find_nearby_hospitals(patient_lat, patient_lon, resource_type):
             "ventilators": hospital.get("available_ventilators", 0),
             "oxygen_available": hospital.get("oxygen_available", False),
             "contact": hospital.get("contact"),
-            "distance": distance
+            "distance": distance,
+            "avg_cost": hospital.get("avg_cost"),
+            "cost_period": hospital.get("cost_period"),
+            "updated_at": hospital.get("updated_at"),
+            "distance": round(distance, 1),
+            
         })
 
     # Sort hospitals from nearest to farthest

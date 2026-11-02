@@ -11,6 +11,21 @@ from models.search_log import save_search_log
 from utils.distance import find_nearby_hospitals
 from utils.geo import list_areas, resolve_area
 from utils.ui import apply_theme, page_header, render_empty_state, render_error, render_not_available
+from datetime import datetime, timezone
+
+def time_ago(moment):
+    if not moment:
+        return "unknown"
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    seconds = int((datetime.now(timezone.utc) - moment).total_seconds())
+    if seconds < 60:
+        return "just now"
+    if seconds < 3600:
+        return f"{seconds // 60} min ago"
+    if seconds < 86400:
+        return f"{seconds // 3600} h ago"
+    return f"{seconds // 86400} day(s) ago"
 
 RESOURCE_OPTIONS = ["ICU bed", "General bed", "Ventilator", "Any"]
 
@@ -34,13 +49,15 @@ def render_hospital_card(hospital: dict) -> None:
         vent.metric("Ventilators", hospital.get("ventilators", 0))
 
         st.write("Oxygen: " + ("✅ available" if hospital.get("oxygen_available") else "❌ not available"))
-
+        if hospital.get("avg_cost") is not None:
+            period = (hospital.get("cost_period") or "").replace("_", " ")
+            st.write(f"💰 Avg. cost: ₹{hospital['avg_cost']:,} {period}")
+        st.caption(f"Last updated {time_ago(hospital.get('updated_at'))}")
         contact = hospital.get("contact")
         if contact:
             digits = "".join(ch for ch in contact if ch.isdigit() or ch == "+")
             st.markdown(f"📞 [Call {contact}](tel:{digits})")
         st.caption("Availability can change quickly. Please call to confirm before travelling.")
-
 
 with st.form("search_form"):
     areas = list_areas()

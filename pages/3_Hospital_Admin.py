@@ -61,6 +61,14 @@ else:
             icu = b.number_input("Available ICU beds", min_value=0, value=int(hospital.get("available_icu_beds", 0)), step=1)
             vent = c.number_input("Available ventilators", min_value=0, value=int(hospital.get("available_ventilators", 0)), step=1)
             oxygen = st.checkbox("Oxygen available", value=bool(hospital.get("oxygen_available", False)))
+            d, e = st.columns(2)
+            avg_cost = d.number_input("Average cost (₹)", min_value=0,
+                                      value=int(hospital.get("avg_cost") or 0), step=50)
+            periods = ["per_day", "per_hour", "per_visit"]
+            current = hospital.get("cost_period", "per_day")
+            if current not in periods:
+                periods.append(current)
+            cost_period = e.selectbox("Cost period", periods, index=periods.index(current))
             if st.form_submit_button("Save availability", type="primary"):
                 ok, result = update_resources(admin["hospital_name"], beds, icu, vent, oxygen)
                 if ok:

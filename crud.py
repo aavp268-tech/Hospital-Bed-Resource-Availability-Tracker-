@@ -48,7 +48,7 @@ def get_hospital(hospital_name):
     return hospitals_collection.find_one({"hospital_name": hospital_name})
 
 
-def update_resources(hospital_name, available_beds, available_icu_beds, available_ventilators, oxygen_available):
+def update_resources(hospital_name, available_beds, available_icu_beds, available_ventilators, oxygen_available, avg_cost=None, cost_period=None):
     """Validate and save new availability numbers for one hospital.
 
     Returns (True, hospital_doc) on success, (False, error_message) on failure.
@@ -76,6 +76,17 @@ def update_resources(hospital_name, available_beds, available_icu_beds, availabl
     if not isinstance(oxygen_available, bool):
         return False, "oxygen_available must be True or False"
 
+    extra = {}
+    if avg_cost is not None:
+        if isinstance(avg_cost, bool) or not isinstance(avg_cost, (int, float)):
+            return False, "avg_cost must be a number"
+        if avg_cost < 0:
+            return False, "avg_cost cannot be negative"
+        extra["avg_cost"] = avg_cost
+    if cost_period is not None:
+        extra["cost_period"] = cost_period
+
+        
     now = datetime.now(timezone.utc)
     hospitals_collection.update_one(
         {"hospital_name": hospital_name},

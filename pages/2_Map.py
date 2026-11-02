@@ -80,6 +80,8 @@ for hospital in all_hospitals:
         f"Beds: {hospital.get('available_beds', 0)} &nbsp; ICU: {hospital.get('available_icu_beds', 0)} "
         f"&nbsp; Ventilators: {hospital.get('available_ventilators', 0)}",
         "Oxygen: " + ("yes" if hospital.get("oxygen_available") else "no"),
+        (f"Avg. cost: ₹{hospital['avg_cost']:,} {str(hospital.get('cost_period', '')).replace('_', ' ')}"
+         if hospital.get("avg_cost") is not None else "Avg. cost: not listed"), 
     ]
     folium.Marker(
         (lat, lon),
