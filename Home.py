@@ -36,7 +36,35 @@ cols[3].metric("Ventilators available", total_vent)
 st.caption(f"{oxygen_count} of {len(hospitals)} hospitals currently report oxygen available.")
 
 st.divider()
-left, right = st.columns(2)
+st.markdown(
+    """
+    <style>
+      /* blue navigation cards on the home page */
+      div[data-testid="stVerticalBlockBorderWrapper"]:has(.nav-card-marker) {
+        background: #e8f2fb;
+        border: 1px solid #b9d6ee;
+        border-left: 5px solid #1f6fb5;
+        border-radius: 12px;
+      }
+      div[data-testid="stVerticalBlockBorderWrapper"]:has(.nav-card-marker) h3 {
+        color: #0f4c81;
+      }
+      div[data-testid="stVerticalBlockBorderWrapper"]:has(.nav-card-marker) a[data-testid="stPageLink-NavLink"] {
+        background: #1f6fb5;
+        border-radius: 8px;
+        padding: 0.35rem 0.9rem;
+        width: fit-content;
+      }
+      div[data-testid="stVerticalBlockBorderWrapper"]:has(.nav-card-marker) a[data-testid="stPageLink-NavLink"] * {
+        color: #ffffff !important;
+      }
+      div[data-testid="stVerticalBlockBorderWrapper"]:has(.nav-card-marker) a[data-testid="stPageLink-NavLink"]:hover {
+        background: #175a96;
+      }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 with left:
     st.markdown("### 🔎 Find a hospital")
     st.write("Search by area, resource type and distance, with a tap-to-call number for every result.")
