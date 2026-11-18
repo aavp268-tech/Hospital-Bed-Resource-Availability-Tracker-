@@ -10,28 +10,7 @@ from config.db import HOSPITALS, get_db
 from utils.ui import apply_theme, page_header, render_error
 
 st.set_page_config(page_title="Hospital Bed Tracker", page_icon="🏥", layout="wide")
-apply_theme(st.markdown(
-    """
-    <style>
-      .st-key-nav_search, .st-key-nav_map {
-        background: #e8f2fb !important;
-        border: 1px solid #b9d6ee !important;
-        border-left: 5px solid #1f6fb5 !important;
-        border-radius: 12px !important;
-      }
-      .st-key-nav_search h3, .st-key-nav_map h3 { color: #0f4c81; }
-      .st-key-nav_search a, .st-key-nav_map a {
-        background: #1f6fb5;
-        border-radius: 8px;
-        padding: 0.35rem 0.9rem;
-        width: fit-content;
-      }
-      .st-key-nav_search a *, .st-key-nav_map a * { color: #ffffff !important; }
-      .st-key-nav_search a:hover, .st-key-nav_map a:hover { background: #175a96; }
-    </style>
-    """,
-    unsafe_allow_html=True,
-))
+apply_theme()
 page_header(
     "Mumbai care network",
     "Find care with confidence.",
@@ -57,6 +36,35 @@ cols[3].metric("Ventilators available", total_vent)
 st.caption(f"{oxygen_count} of {len(hospitals)} hospitals currently report oxygen available.")
 
 st.divider()
+st.markdown(
+    """
+    <style>
+      /* blue navigation cards on the home page */
+      div[data-testid="stVerticalBlockBorderWrapper"]:has(.nav-card-marker) {
+        background: #e8f2fb;
+        border: 1px solid #b9d6ee;
+        border-left: 5px solid #1f6fb5;
+        border-radius: 12px;
+      }
+      div[data-testid="stVerticalBlockBorderWrapper"]:has(.nav-card-marker) h3 {
+        color: #0f4c81;
+      }
+      div[data-testid="stVerticalBlockBorderWrapper"]:has(.nav-card-marker) a[data-testid="stPageLink-NavLink"] {
+        background: #1f6fb5;
+        border-radius: 8px;
+        padding: 0.35rem 0.9rem;
+        width: fit-content;
+      }
+      div[data-testid="stVerticalBlockBorderWrapper"]:has(.nav-card-marker) a[data-testid="stPageLink-NavLink"] * {
+        color: #ffffff !important;
+      }
+      div[data-testid="stVerticalBlockBorderWrapper"]:has(.nav-card-marker) a[data-testid="stPageLink-NavLink"]:hover {
+        background: #175a96;
+      }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 st.divider()
 left, right = st.columns(2)
 with left:
