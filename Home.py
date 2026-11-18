@@ -65,14 +65,20 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+st.divider()
+left, right = st.columns(2)
 with left:
-    st.markdown("### 🔎 Find a hospital")
-    st.write("Search by area, resource type and distance, with a tap-to-call number for every result.")
-    st.page_link("pages/1_Search.py", label="Go to Search", icon="🔎")
+    with st.container(border=True):
+        st.markdown('<span class="nav-card-marker"></span>', unsafe_allow_html=True)
+        st.markdown("### 🔎 Find a hospital")
+        st.write("Search by area, resource and distance, with tap-to-call numbers.")
+        st.page_link("pages/1_Search.py", label="Go to Search", icon="🔎")
 with right:
-    st.markdown("### 🗺️ View on the map")
-    st.write("See your latest search plotted on a map, colour-coded by availability.")
-    st.page_link("pages/2_Map.py", label="Go to Map", icon="🗺️")
+    with st.container(border=True):
+        st.markdown('<span class="nav-card-marker"></span>', unsafe_allow_html=True)
+        st.markdown("### 🗺️ View on the map")
+        st.write("See your latest search on a map, colour-coded by availability.")
+        st.page_link("pages/2_Map.py", label="Go to Map", icon="🗺️")
 
 st.divider()
 st.caption(
