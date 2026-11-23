@@ -9,7 +9,7 @@ Developed as a **Mini Project (Phase 1 & 2)** by the Department of Data Science,
 ---
 ## 🌐 Live Demo
 
-🚀 **Explore CareMap:** [Visit Website](YOUR_DEPLOYED_WEBSITE_URL)
+🚀 **Explore CareMap:** [Visit Website](https://hospital-bed-resource-availability-tracker.streamlit.app/)
 
 Try the application and explore hospital search, resource availability, interactive maps, and the hospital admin portal.
 ## 📌 Project Information
